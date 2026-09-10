@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #123317;
+  --color-ink-soft: #416047;
+  --color-canvas: #ffffff;
+  --color-sand: #ecfae5;
+  --color-sand-dark: #d9efcf;
+  --color-teal: #0a5714;
+  --color-teal-light: #0d6b1a;
+  --color-teal-dim: #0a571414;
+  --color-gold: #0a5714;
+  --color-gold-light: #bfe8b5;
+  --color-line: #cfe5c8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 24s linear infinite;
+  width: max-content;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-teal);
+}
+
+::selection {
+  background-color: var(--color-gold-light);
+  color: var(--color-teal);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
