@@ -39,11 +39,7 @@ export function ContactSupport() {
     <section className="bg-sand px-4 py-12 sm:px-6 md:px-10 md:py-16">
       <div className="mx-auto max-w-6xl">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal/60">Layanan informasi</p>
           <h2 className="mt-2 text-3xl font-bold tracking-tight text-teal md:text-4xl">Butuh bantuan?</h2>
-          <p className="mt-3 text-sm text-ink-soft">
-            Hubungi tim kami melalui kanal layanan yang paling nyaman untuk Anda.
-          </p>
         </div>
 
         <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

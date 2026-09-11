@@ -2,6 +2,7 @@ import http from 'node:http'
 
 const port = Number(process.env.PORT || 3001)
 const wordpressApiUrl = (process.env.WORDPRESS_API_URL || 'https://hikjateng.co.id/wp-json/wp/v2/posts').replace(/\/$/, '')
+const wordpressCategoriesUrl = wordpressApiUrl.replace(/\/posts$/, '/categories')
 
 const headers = {
   'Access-Control-Allow-Origin': process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
@@ -13,6 +14,20 @@ function sendJson(response, status, body) {
   response.end(JSON.stringify(body))
 }
 
+async function getCategoryNames() {
+  const url = new URL(wordpressCategoriesUrl)
+  url.searchParams.set('per_page', '100')
+  url.searchParams.set('_fields', 'id,name')
+
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(`WordPress categories API error: ${response.status}`)
+  }
+
+  const categories = await response.json()
+  return new Map(categories.map((category) => [category.id, category.name]))
+}
+
 async function getBerita(limit) {
   if (!wordpressApiUrl) {
     throw new Error('WORDPRESS_API_URL belum dikonfigurasi')
@@ -21,14 +36,24 @@ async function getBerita(limit) {
   const url = new URL(wordpressApiUrl)
   url.searchParams.set('per_page', String(limit))
   url.searchParams.set('_embed', '1')
-  url.searchParams.set('_fields', 'id,date,slug,title,excerpt,content,_embedded')
+  url.searchParams.set('_fields', 'id,date,slug,title,excerpt,content,categories,_embedded')
 
   const wordpressResponse = await fetch(url)
   if (!wordpressResponse.ok) {
     throw new Error(`WordPress API error: ${wordpressResponse.status}`)
   }
 
-  return wordpressResponse.json()
+  const [posts, categoryNames] = await Promise.all([
+    wordpressResponse.json(),
+    getCategoryNames(),
+  ])
+
+  return posts.map((post) => ({
+    ...post,
+    category_names: (post.categories || [])
+      .map((categoryId) => categoryNames.get(categoryId))
+      .filter(Boolean),
+  }))
 }
 
 const server = http.createServer(async (request, response) => {

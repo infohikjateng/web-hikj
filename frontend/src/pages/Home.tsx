@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { ChevronsLeft, ChevronsRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Section } from '../components/ui/Section'
 import { ContactSupport } from '../components/home/ContactSupport'
@@ -31,7 +32,9 @@ const heroSlides = [
 
 export function Home() {
   const [activeSlide, setActiveSlide] = useState(0)
-  const { berita, isLoading, error } = useBerita()
+  const [kategoriAktif, setKategoriAktif] = useState('Semua')
+  const [halamanBerita, setHalamanBerita] = useState(1)
+  const { berita, isLoading, error } = useBerita(100)
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -43,6 +46,17 @@ export function Home() {
 
   const goToSlide = (index: number) => {
     setActiveSlide((index + heroSlides.length) % heroSlides.length)
+  }
+
+  const kategoriBerita = Array.from(new Set(berita.flatMap((item) => item.kategori ?? []))).sort((a, b) => a.localeCompare(b, 'id'))
+  const beritaTerfilter = kategoriAktif === 'Semua' ? berita : berita.filter((item) => item.kategori?.includes(kategoriAktif))
+  const jumlahHalamanBerita = Math.max(1, Math.ceil(beritaTerfilter.length / 6))
+  const halamanAktif = Math.min(halamanBerita, jumlahHalamanBerita)
+  const beritaTampil = beritaTerfilter.slice((halamanAktif - 1) * 6, halamanAktif * 6)
+
+  const pilihKategori = (kategori: string) => {
+    setKategoriAktif(kategori)
+    setHalamanBerita(1)
   }
 
   return (
@@ -106,30 +120,68 @@ export function Home() {
       </Section>
 
       <Section tone="canvas">
-        <div className="flex items-baseline justify-between">
-          <h2 className="font-display text-3xl text-teal">Berita terkini</h2>
+        <div className="flex flex-col gap-5 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal/60">Jelajahi kabar kami</p>
+            <h2 className="mt-2 font-display text-3xl text-teal">Berita terkini</h2>
+          </div>
           <Link to="/informasi/berita" className="text-sm text-teal hover:text-gold">
             Semua berita
           </Link>
         </div>
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {berita.map((b) => (
-            <Link key={b.slug} to={`/informasi/berita/${b.slug}`} className="group">
-              {b.gambar && (
-                <img
-                  src={b.gambar}
-                  alt={b.gambarAlt || b.judul}
-                  className="mb-4 aspect-[16/9] w-full rounded-lg object-cover"
-                />
+        <div className="mt-6 flex max-w-full gap-2 overflow-x-auto pb-1" aria-label="Filter kategori berita">
+          {['Semua', ...kategoriBerita].map((kategori) => (
+            <button
+              key={kategori}
+              type="button"
+              onClick={() => pilihKategori(kategori)}
+              aria-pressed={kategoriAktif === kategori}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-bold transition-colors ${kategoriAktif === kategori ? 'border-teal bg-teal text-white' : 'border-line bg-white text-ink-soft hover:border-teal hover:text-teal'}`}
+            >
+              {kategori}
+            </button>
+          ))}
+        </div>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {beritaTampil.map((b) => (
+            <Link key={b.slug} to={`/informasi/berita/${b.slug}`} className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-teal/40 hover:shadow-lg hover:shadow-teal/10">
+              {b.gambar ? (
+                <img src={b.gambar} alt={b.gambarAlt || b.judul} className="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105" />
+              ) : (
+                <div className="flex aspect-[16/10] items-center justify-center bg-sand px-6 text-center text-sm font-bold text-teal/60">BPRS HIK Jawa Tengah</div>
               )}
-              <p className="text-xs text-ink-soft">{b.tanggal}</p>
-              <h3 className="mt-2 font-display text-xl text-teal group-hover:text-teal-light">{b.judul}</h3>
-              <p className="mt-2 text-sm text-ink-soft">{b.ringkasan}</p>
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-wrap gap-2">
+                  {(b.kategori ?? []).slice(0, 2).map((kategori) => (
+                    <span key={kategori} className="rounded-full bg-sand px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-teal">{kategori}</span>
+                  ))}
+                </div>
+                <p className="mt-4 text-xs font-semibold text-ink-soft">{b.tanggal}</p>
+                <h3 className="mt-2 font-display text-xl leading-tight text-ink transition-colors group-hover:text-teal">{b.judul}</h3>
+                <p className="mt-3 line-clamp-3 text-sm leading-6 text-ink-soft">{b.ringkasan}</p>
+                <span className="mt-5 text-sm font-bold text-teal">Baca selengkapnya <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">-&gt;</span></span>
+              </div>
             </Link>
           ))}
         </div>
         {isLoading && <p className="mt-6 text-sm text-ink-soft">Memuat berita terbaru...</p>}
         {error && <p className="mt-6 text-sm text-ink-soft">{error}</p>}
+        {!isLoading && beritaTampil.length === 0 && <p className="mt-8 text-sm text-ink-soft">Belum ada berita pada kategori ini.</p>}
+        {jumlahHalamanBerita > 1 && (
+          <nav className="mt-10 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination berita terkini">
+            <button type="button" onClick={() => setHalamanBerita(Math.max(1, halamanAktif - 1))} disabled={halamanAktif === 1} className="inline-flex items-center gap-1 rounded-md border border-line px-3 py-2 text-sm font-bold text-teal transition-colors hover:border-teal disabled:cursor-not-allowed disabled:opacity-40" aria-label="Ke berita sebelumnya">
+              <ChevronsLeft size={16} aria-hidden="true" /><span className="hidden sm:inline">Sebelumnya</span>
+            </button>
+            {Array.from({ length: jumlahHalamanBerita }, (_, index) => index + 1).map((nomor) => (
+              <button key={nomor} type="button" onClick={() => setHalamanBerita(nomor)} aria-current={halamanAktif === nomor ? 'page' : undefined} className={`h-9 min-w-9 rounded-md px-2 text-sm font-bold transition-colors ${halamanAktif === nomor ? 'bg-teal text-white' : 'border border-line text-teal hover:border-teal'}`}>
+                {nomor}
+              </button>
+            ))}
+            <button type="button" onClick={() => setHalamanBerita(Math.min(jumlahHalamanBerita, halamanAktif + 1))} disabled={halamanAktif === jumlahHalamanBerita} className="inline-flex items-center gap-1 rounded-md border border-line px-3 py-2 text-sm font-bold text-teal transition-colors hover:border-teal disabled:cursor-not-allowed disabled:opacity-40" aria-label="Ke berita berikutnya">
+              <span className="hidden sm:inline">Berikutnya</span><ChevronsRight size={16} aria-hidden="true" />
+            </button>
+          </nav>
+        )}
       </Section>
     </>
   )

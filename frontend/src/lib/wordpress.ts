@@ -7,11 +7,18 @@ interface WordPressPost {
   title: { rendered: string }
   excerpt: { rendered: string }
   content: { rendered: string }
+  categories?: number[]
+  category_names?: string[]
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string
       alt_text?: string
     }>
+    'wp:term'?: Array<Array<{
+      taxonomy: string
+      name: string
+      slug: string
+    }>>
   }
 }
 
@@ -29,6 +36,10 @@ function getContentImage(value: string) {
 
 function mapPost(post: WordPressPost): Berita {
   const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0]
+  const categories = post.category_names || post._embedded?.['wp:term']
+    ?.flat()
+    .filter((term) => term.taxonomy === 'category')
+    .map((term) => term.name)
   const title = stripHtml(post.title.rendered)
 
   return {
@@ -42,6 +53,7 @@ function mapPost(post: WordPressPost): Berita {
     ringkasan: stripHtml(post.excerpt.rendered || post.content.rendered),
     gambar: featuredMedia?.source_url || getContentImage(post.content.rendered),
     gambarAlt: featuredMedia?.alt_text || title,
+    kategori: categories,
   }
 }
 

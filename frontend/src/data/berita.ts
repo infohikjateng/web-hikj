@@ -5,6 +5,7 @@ export interface Berita {
   ringkasan: string
   gambar?: string
   gambarAlt?: string
+  kategori?: string[]
 }
 
 export const beritaTerkini: Berita[] = [
