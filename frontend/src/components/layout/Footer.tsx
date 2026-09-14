@@ -10,7 +10,7 @@ import { footerProdukLinks, footerTentangLinks } from '../../data/navigation'
 export function Footer() {
   return (
     <footer className="border-t border-line bg-teal">
-      <div className="mx-auto max-w-7xl px-6 py-14 text-canvas sm:px-8 lg:px-10 lg:py-16">
+      <div className="mx-auto max-w-7xl px-6 pb-0 pt-14 text-canvas sm:px-8 lg:px-10 lg:pb-0 lg:pt-16">
         <div className="flex flex-col justify-between gap-12 lg:flex-row lg:gap-20">
           <div className="flex max-w-sm flex-col gap-6">
             <Link to="/" aria-label="BPRS HIK Jawa Tengah">
@@ -38,9 +38,6 @@ export function Footer() {
               <SocialLink href="https://www.linkedin.com/" label="LinkedIn">
                 <FontAwesomeIcon icon={faLinkedin} size="lg" aria-hidden="true" />
               </SocialLink>
-              <SocialLink href="https://hikjateng.co.id/" label="Situs web">
-                <ExternalLink size={18} aria-hidden="true" />
-              </SocialLink>
             </div>
           </div>
 
@@ -58,19 +55,25 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/30 pt-8">
-          <div className="flex flex-col gap-6 text-xs font-semibold leading-5 text-canvas/85 md:flex-row md:items-center md:justify-between md:gap-8">
-            <p className="max-w-xl">
-              PT BPRS Harta Insan Karimah Jawa Tengah berizin dan diawasi oleh Otoritas Jasa Keuangan,
-              serta merupakan peserta Penjaminan LPS.
-            </p>
-            <p className="whitespace-nowrap md:text-right">© {new Date().getFullYear()} PT BPRS HIK Jawa Tengah</p>
+        <div className="relative left-1/2 mt-12 w-screen -translate-x-1/2 bg-white text-teal">
+          <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
+            <div className="grid items-center gap-8 text-xs font-semibold leading-5 md:grid-cols-[minmax(0,1fr)_minmax(32rem,auto)] md:gap-12">
+              <div>
+                <p className="max-w-xl">
+                  PT BPRS Harta Insan Karimah Jawa Tengah berizin dan diawasi oleh Otoritas Jasa Keuangan,
+                  serta merupakan peserta Penjaminan LPS.
+                </p>
+                <p className="mt-4 whitespace-nowrap">© {new Date().getFullYear()} PT BPRS HIK Jawa Tengah</p>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <img
+                  src={logoLembaga}
+                  alt="Logo regulator dan lembaga terkait"
+                  className="h-auto w-full max-w-[32rem]"
+                />
+              </div>
+            </div>
           </div>
-          <img
-            src={logoLembaga}
-            alt="Logo regulator dan lembaga terkait"
-            className="mt-6 h-auto w-full max-w-[27rem] md:ml-auto"
-          />
         </div>
       </div>
     </footer>
