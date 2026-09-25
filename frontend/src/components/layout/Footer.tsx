@@ -61,9 +61,12 @@ export function Footer() {
               <div>
                 <p className="max-w-xl">
                   PT BPRS Harta Insan Karimah Jawa Tengah berizin dan diawasi oleh Otoritas Jasa Keuangan,
-                  serta merupakan peserta Penjaminan LPS.
+                  serta merupakan peserta Penjaminan LPS.{' '}
+                  <Link to="/release-notes" className="underline decoration-teal/40 underline-offset-4 hover:text-teal-light">
+                    © {new Date().getFullYear()} PT BPRS HIK Jawa Tengah
+                  </Link>
                 </p>
-                <p className="mt-4 whitespace-nowrap">© {new Date().getFullYear()} PT BPRS HIK Jawa Tengah</p>
+                <p className="mt-4 whitespace-nowrap"></p>
               </div>
               <div className="flex justify-center md:justify-end">
                 <img

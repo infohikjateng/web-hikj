@@ -1,0 +1,11 @@
+INFORMASI RILIS WEBSITE HIK JAWA TENGAH
+Versi 1.0.0 - 25 September 2026
+
+Pembaruan:
+- Penyegaran tampilan website agar informasi lebih mudah ditemukan di desktop dan perangkat seluler.
+- Penyempurnaan navigasi untuk mengakses informasi perusahaan, produk, berita, dan layanan bantuan.
+- Penambahan halaman simulasi untuk membantu pengunjung membuat perhitungan awal sesuai kebutuhan.
+- Penyusunan ulang halaman informasi dan berita agar konten lebih rapi serta nyaman dibaca.
+
+Catatan:
+Dokumen ini hanya memuat ringkasan pembaruan yang ditujukan untuk publik.

@@ -7,6 +7,8 @@ import { BeritaList } from './pages/informasi/BeritaList'
 import { BeritaDetail } from './pages/informasi/BeritaDetail'
 import { HubungiKami } from './pages/info-kami/HubungiKami'
 import { Simulasi } from './pages/Simulasi'
+import { ReleaseNotes } from './pages/ReleaseNotes'
+import { PengaduanNasabah } from './pages/info-kami/PengaduanNasabah'
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
         <Route path="produk/:slug" element={<ProdukDetail />} />
 
         {/* Informasi */}
+        <Route path="release-notes" element={<ReleaseNotes />} />
         <Route
           path="informasi/laporan-publikasi"
           element={<ContentPage title="Laporan publikasi" />}
@@ -64,10 +67,7 @@ function App() {
 
         {/* Info kami */}
         <Route path="info-kami/hubungi-kami" element={<HubungiKami />} />
-        <Route
-          path="info-kami/pengaduan-nasabah"
-          element={<ContentPage title="Pengaduan nasabah" description="Sampaikan keluhan Anda, kami akan menindaklanjuti." />}
-        />
+        <Route path="info-kami/pengaduan-nasabah" element={<PengaduanNasabah />} />
 
         <Route path="*" element={<ContentPage title="Halaman tidak ditemukan" />} />
       </Route>

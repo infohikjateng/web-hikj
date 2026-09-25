@@ -1,66 +1,17 @@
 import http from 'node:http'
+import { config, headers } from './config/env.mjs'
+import { sendJson } from './lib/http.mjs'
+import { createChatRoute } from './routes/chat.mjs'
+import { createBeritaRoute } from './routes/berita.mjs'
 
-const port = Number(process.env.PORT || 3001)
-const wordpressApiUrl = (process.env.WORDPRESS_API_URL || 'https://hikjateng.co.id/wp-json/wp/v2/posts').replace(/\/$/, '')
-const wordpressCategoriesUrl = wordpressApiUrl.replace(/\/posts$/, '/categories')
-
-const headers = {
-  'Access-Control-Allow-Origin': process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
-  'Content-Type': 'application/json; charset=utf-8',
-}
-
-function sendJson(response, status, body) {
-  response.writeHead(status, headers)
-  response.end(JSON.stringify(body))
-}
-
-async function getCategoryNames() {
-  const url = new URL(wordpressCategoriesUrl)
-  url.searchParams.set('per_page', '100')
-  url.searchParams.set('_fields', 'id,name')
-
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error(`WordPress categories API error: ${response.status}`)
-  }
-
-  const categories = await response.json()
-  return new Map(categories.map((category) => [category.id, category.name]))
-}
-
-async function getBerita(limit) {
-  if (!wordpressApiUrl) {
-    throw new Error('WORDPRESS_API_URL belum dikonfigurasi')
-  }
-
-  const url = new URL(wordpressApiUrl)
-  url.searchParams.set('per_page', String(limit))
-  url.searchParams.set('_embed', '1')
-  url.searchParams.set('_fields', 'id,date,slug,title,excerpt,content,categories,_embedded')
-
-  const wordpressResponse = await fetch(url)
-  if (!wordpressResponse.ok) {
-    throw new Error(`WordPress API error: ${wordpressResponse.status}`)
-  }
-
-  const [posts, categoryNames] = await Promise.all([
-    wordpressResponse.json(),
-    getCategoryNames(),
-  ])
-
-  return posts.map((post) => ({
-    ...post,
-    category_names: (post.categories || [])
-      .map((categoryId) => categoryNames.get(categoryId))
-      .filter(Boolean),
-  }))
-}
+const chatRoute = createChatRoute(config)
+const beritaRoute = createBeritaRoute(config)
 
 const server = http.createServer(async (request, response) => {
   if (request.method === 'OPTIONS') {
     response.writeHead(204, {
       ...headers,
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     })
     response.end()
@@ -69,22 +20,19 @@ const server = http.createServer(async (request, response) => {
 
   const requestUrl = new URL(request.url || '/', `http://${request.headers.host}`)
 
-  if (request.method === 'GET' && requestUrl.pathname === '/api/berita') {
-    const requestedLimit = Number(requestUrl.searchParams.get('limit') || 3)
-    const limit = Number.isInteger(requestedLimit) ? Math.min(Math.max(requestedLimit, 1), 100) : 3
-
-    try {
-      sendJson(response, 200, await getBerita(limit))
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Gagal mengambil berita'
-      sendJson(response, 502, { error: message })
-    }
+  if (request.method === 'POST' && requestUrl.pathname === '/api/chat') {
+    await chatRoute(request, response)
     return
   }
 
-  sendJson(response, 404, { error: 'Endpoint tidak ditemukan' })
+  if (request.method === 'GET' && requestUrl.pathname === '/api/berita') {
+    await beritaRoute(request, response, requestUrl)
+    return
+  }
+
+  sendJson(response, 404, { error: 'Endpoint tidak ditemukan' }, headers)
 })
 
-server.listen(port, () => {
-  console.log(`Backend berjalan di http://localhost:${port}`)
+server.listen(config.port, () => {
+  console.log(`Backend berjalan di http://localhost:${config.port}`)
 })

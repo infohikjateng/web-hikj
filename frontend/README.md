@@ -12,6 +12,28 @@ npm run dev
 
 Buka `http://localhost:5173`.
 
+## Konfigurasi EmailJS untuk pengaduan
+
+Halaman `/info-kami/pengaduan-nasabah` sudah memiliki form WBS dan pengiriman EmailJS.
+Salin `.env.example` menjadi `.env`, lalu isi tiga nilai dari dashboard EmailJS:
+
+```env
+VITE_EMAILJS_SERVICE_ID=service_id_anda
+VITE_EMAILJS_TEMPLATE_ID=template_id_anda
+VITE_EMAILJS_PUBLIC_KEY=public_key_anda
+```
+
+Template EmailJS perlu menyediakan variabel berikut:
+
+```text
+ticket_number, reporter_name, reporter_email, reporter_phone,
+incident_date, complaint_category, related_unit, incident_location,
+complaint_description, additional_info
+```
+
+Sebelum ketiga nilai diisi, form tetap dapat dibuka dan divalidasi tetapi tidak mengirim laporan.
+Jangan menaruh private key EmailJS atau API key OpenRouter di frontend.
+
 Perintah lain:
 
 ```bash
