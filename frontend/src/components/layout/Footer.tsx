@@ -72,7 +72,7 @@ export function Footer() {
                 <img
                   src={logoLembaga}
                   alt="Logo regulator dan lembaga terkait"
-                  className="h-auto w-full max-w-[32rem]"
+                  className="h-auto w-full max-w-lg"
                 />
               </div>
             </div>
