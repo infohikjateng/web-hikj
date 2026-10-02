@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { Home } from './pages/Home'
@@ -10,9 +11,32 @@ import { Simulasi } from './pages/Simulasi'
 import { ReleaseNotes } from './pages/ReleaseNotes'
 import { PengaduanNasabah } from './pages/info-kami/PengaduanNasabah'
 
+const InternalLogin = lazy(() =>
+  import('./pages/internal/InternalLogin').then(({ InternalLogin: page }) => ({ default: page })),
+)
+const InternalDashboard = lazy(() =>
+  import('./pages/internal/InternalDashboard').then(({ InternalDashboard: page }) => ({ default: page })),
+)
+
 function App() {
   return (
     <Routes>
+      <Route
+        path="internal/login"
+        element={(
+          <Suspense fallback={<main className="grid min-h-screen place-items-center bg-sand px-5 text-sm text-ink-soft">Memuat halaman login...</main>}>
+            <InternalLogin />
+          </Suspense>
+        )}
+      />
+      <Route
+        path="internal/dashboard"
+        element={(
+          <Suspense fallback={<main className="grid min-h-screen place-items-center bg-sand px-5 text-sm text-ink-soft">Memuat dashboard...</main>}>
+            <InternalDashboard />
+          </Suspense>
+        )}
+      />
       <Route element={<Layout />}>
         <Route index element={<Home />} />
 
