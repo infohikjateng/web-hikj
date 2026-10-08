@@ -18,7 +18,7 @@ const productImages: Record<string, { src: string; alt: string }> = {
   },
 }
 
-export function ProductShowcase() {
+export function ProductShowcase({ variant = 'featured' }: { variant?: 'featured' | 'compact' }) {
   const sectionRef = useRef<HTMLElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -40,6 +40,42 @@ export function ProductShowcase() {
     return () => observer.disconnect()
   }, [])
 
+  if (variant === 'compact') {
+    return (
+      <section ref={sectionRef} className="rounded-2xl border border-line bg-white p-4 sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-teal">Produk & layanan</h2>
+          </div>
+          <Link to="/produk/tabungan" className="shrink-0 text-xs font-bold text-teal hover:text-teal-light">
+            Jelajahi
+          </Link>
+        </div>
+
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {ringkasanProduk.map((product) => {
+            const image = productImages[product.slug]
+
+            return (
+              <Link
+                key={product.slug}
+                to={`/produk/${product.slug}`}
+                className="group relative flex min-w-0 flex-col overflow-hidden rounded-xl bg-sand/45 p-2 transition-colors hover:bg-sand"
+              >
+                <img src={image.src} alt="" className="h-12 w-full rounded-lg object-cover sm:h-16" />
+                <span className="mt-2 min-w-0">
+                  <span className="block truncate pr-4 text-[11px] font-bold text-teal sm:text-sm">{product.nama}</span>
+                  <span className="mt-0.5 line-clamp-2 block text-[9px] leading-3 text-ink-soft sm:text-[11px] sm:leading-4">{product.deskripsi}</span>
+                </span>
+                <ArrowUpRight size={14} className="absolute right-3 top-[4.1rem] text-teal/50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:top-[5.1rem]" aria-hidden="true" />
+              </Link>
+            )
+          })}
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section ref={sectionRef} className="overflow-hidden bg-white px-4 py-16 sm:px-6 md:px-10 md:py-24">
       <div className="mx-auto max-w-6xl">
@@ -48,7 +84,6 @@ export function ProductShowcase() {
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal/60">Solusi finansial syariah</p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-teal md:text-5xl">Produk & layanan</h2>
           <p className="mt-4 max-w-xl text-sm leading-6 text-ink-soft md:text-base">
             Pilihan layanan yang dirancang untuk membantu kebutuhan finansial pribadi, keluarga, dan usaha Anda.

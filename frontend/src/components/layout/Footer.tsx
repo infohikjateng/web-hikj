@@ -54,27 +54,27 @@ export function Footer() {
             />
           </div>
         </div>
+      </div>
 
-        <div className="relative left-1/2 mt-12 w-screen -translate-x-1/2 bg-white text-teal">
-          <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
-            <div className="grid items-center gap-8 text-xs font-semibold leading-5 md:grid-cols-[minmax(0,1fr)_minmax(32rem,auto)] md:gap-12">
-              <div>
-                <p className="max-w-xl">
-                  PT BPRS Harta Insan Karimah Jawa Tengah berizin dan diawasi oleh Otoritas Jasa Keuangan,
-                  serta merupakan peserta Penjaminan LPS.{' '}
-                  <Link to="/release-notes" className="underline decoration-teal/40 underline-offset-4 hover:text-teal-light">
-                    © {new Date().getFullYear()} PT BPRS HIK Jawa Tengah
-                  </Link>
-                </p>
-                <p className="mt-4 whitespace-nowrap"></p>
-              </div>
-              <div className="flex justify-center md:justify-end">
-                <img
-                  src={logoLembaga}
-                  alt="Logo regulator dan lembaga terkait"
-                  className="h-auto w-full max-w-lg"
-                />
-              </div>
+      <div className="mt-12 bg-white text-teal">
+        <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8 lg:px-10">
+          <div className="grid items-center gap-8 text-xs font-semibold leading-5 md:grid-cols-[minmax(0,1fr)_minmax(32rem,auto)] md:gap-12">
+            <div>
+              <p className="max-w-xl">
+                PT BPRS Harta Insan Karimah Jawa Tengah berizin dan diawasi oleh Otoritas Jasa Keuangan,
+                serta merupakan peserta Penjaminan LPS.{' '}
+                <Link to="/release-notes" className="underline decoration-teal/40 underline-offset-4 hover:text-teal-light">
+                  © {new Date().getFullYear()} PT BPRS HIK Jawa Tengah
+                </Link>
+              </p>
+              <p className="mt-4 whitespace-nowrap"></p>
+            </div>
+            <div className="flex justify-center md:justify-end">
+              <img
+                src={logoLembaga}
+                alt="Logo regulator dan lembaga terkait"
+                className="h-auto w-full max-w-lg"
+              />
             </div>
           </div>
         </div>

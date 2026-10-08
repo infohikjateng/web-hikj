@@ -10,6 +10,7 @@ import { HubungiKami } from './pages/info-kami/HubungiKami'
 import { Simulasi } from './pages/Simulasi'
 import { ReleaseNotes } from './pages/ReleaseNotes'
 import { PengaduanNasabah } from './pages/info-kami/PengaduanNasabah'
+import { SearchResults } from './pages/SearchResults'
 
 const InternalLogin = lazy(() =>
   import('./pages/internal/InternalLogin').then(({ InternalLogin: page }) => ({ default: page })),
@@ -39,6 +40,7 @@ function App() {
       />
       <Route element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="pencarian" element={<SearchResults />} />
 
         {/* Tentang kami */}
         <Route

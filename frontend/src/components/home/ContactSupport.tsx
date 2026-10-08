@@ -34,31 +34,59 @@ const contactItems: ContactItem[] = [
   },
 ]
 
-export function ContactSupport() {
+export function ContactSupport({ compact = false }: { compact?: boolean }) {
   return (
-    <section className="bg-sand px-4 py-12 sm:px-6 md:px-10 md:py-16">
-      <div className="mx-auto max-w-6xl">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-teal md:text-4xl">Butuh bantuan?</h2>
+    <section
+      className={
+        compact
+          ? 'rounded-3xl bg-sand/80 p-4 shadow-[0_2px_8px_rgba(10,87,20,0.06)] sm:p-5'
+          : 'bg-sand px-4 py-12 sm:px-6 md:px-10 md:py-16'
+      }
+    >
+      <div className={compact ? '' : 'mx-auto max-w-6xl'}>
+        <div className={compact ? '' : 'mx-auto max-w-2xl text-center'}>
+          <h2 className={compact ? 'text-xl font-bold tracking-tight text-teal' : 'mt-2 text-3xl font-bold tracking-tight text-teal md:text-4xl'}>
+            Butuh bantuan?
+          </h2>
         </div>
 
-        <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <dl
+          className={`grid ${
+            compact ? 'mt-4 grid-cols-2 gap-2.5 sm:gap-3' : 'mt-8 gap-4 sm:grid-cols-2 lg:grid-cols-4'
+          }`}
+        >
           {contactItems.map((item) => {
             const Icon = item.icon
             const content = (
-              <>
-                <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sand text-teal transition-colors group-hover:bg-teal group-hover:text-white">
-                  <Icon size={21} strokeWidth={2} aria-hidden="true" />
+              compact ? (
+                <span className="flex min-w-0 items-start gap-2.5">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sand text-teal">
+                    <Icon size={16} strokeWidth={2} aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0">
+                    <dt className="text-[11px] font-bold text-teal sm:text-xs">{item.label}</dt>
+                    <dd className="mt-0.5 break-words text-[10px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{item.value}</dd>
+                  </span>
                 </span>
-                <dt className="mt-4 text-lg font-bold text-teal">{item.label}</dt>
-                <dd className="mt-2 text-sm leading-6 text-ink-soft">{item.value}</dd>
-              </>
+              ) : (
+                <>
+                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-sand text-teal transition-colors group-hover:bg-teal group-hover:text-white">
+                    <Icon size={21} strokeWidth={2} aria-hidden="true" />
+                  </span>
+                  <dt className="mt-4 text-lg font-bold text-teal">{item.label}</dt>
+                  <dd className="mt-2 text-sm leading-6 text-ink-soft">{item.value}</dd>
+                </>
+              )
             )
 
             return (
               <div
                 key={item.label}
-                className="group rounded-2xl border border-teal/10 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal/30 hover:shadow-lg"
+                className={
+                  compact
+                    ? 'min-w-0 rounded-2xl bg-white/85 p-3 shadow-sm transition-shadow hover:shadow-md'
+                    : 'group rounded-2xl border border-teal/10 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal/30 hover:shadow-lg'
+                }
               >
                 {item.href ? (
                   <a
