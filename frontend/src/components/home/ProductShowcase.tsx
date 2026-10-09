@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import type { SyntheticEvent } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import depositoImage from '../../assets/slider/deposito.png'
+import tabunganImage from '../../assets/slider/tabungan.png'
+import pembiayaanImage from '../../assets/slider/pembiayaan.png'
 import { ringkasanProduk } from '../../data/produk'
 
 const handleProductImageError = (event: SyntheticEvent<HTMLImageElement>) => {
@@ -14,16 +17,16 @@ const handleProductImageError = (event: SyntheticEvent<HTMLImageElement>) => {
 
 const productImages: Record<string, { src: string; alt: string }> = {
   tabungan: {
-    src: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=85',
-    alt: 'Nasabah menggunakan layanan perbankan',
+    src: tabunganImage,
+    alt: 'Ilustrasi produk tabungan HIK Jateng',
   },
   pembiayaan: {
-    src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85',
-    alt: 'Tim berdiskusi merencanakan usaha',
+    src: pembiayaanImage,
+    alt: 'Ilustrasi produk pembiayaan HIK Jateng',
   },
   deposito: {
-    src: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=85',
-    alt: 'Pertemuan untuk merencanakan masa depan',
+    src: depositoImage,
+    alt: 'Ilustrasi produk deposito HIK Jateng',
   },
 }
 

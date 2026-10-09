@@ -85,7 +85,7 @@ export function Home() {
       <section className="bg-canvas px-4 py-6 sm:px-6 md:py-8">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
-            <div className="flex min-h-0 flex-col gap-4 lg:min-h-[570px]">
+            <div className="flex min-h-0 flex-col gap-4 lg:min-h-142.5">
               <div role="region" aria-label="Slider informasi" className="relative h-32 shrink-0 overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(7,59,42,0.16)]">
                 {headerSlides.map((slide, index) => (
                   <div
@@ -127,7 +127,7 @@ export function Home() {
                 </div>
               </div>
 
-              <div className="relative h-[min(52vh,400px)] min-h-[280px] overflow-hidden rounded-2xl bg-forest shadow-lg shadow-forest/20 lg:min-h-0 lg:flex-1">
+              <div className="relative h-[min(52vh,400px)] min-h-70 overflow-hidden rounded-2xl bg-forest shadow-lg shadow-forest/20 lg:min-h-0 lg:flex-1">
                 {heroSlides.map((slide, index) => (
                   <Link
                     key={`${slide.slug}-${index}`}
@@ -214,9 +214,9 @@ export function Home() {
           {beritaTampil.map((b) => (
             <Link key={b.slug} to={`/informasi/berita/${b.slug}`} className="group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-teal/40 hover:shadow-lg hover:shadow-teal/10">
               {b.gambar ? (
-                <img src={b.gambar} alt={b.gambarAlt || b.judul} className="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105" />
+                <img src={b.gambar} alt={b.gambarAlt || b.judul} className="aspect-16/10 w-full object-cover transition duration-500 group-hover:scale-105" />
               ) : (
-                <div className="flex aspect-[16/10] items-center justify-center bg-sand px-6 text-center text-sm font-bold text-teal/60">BPRS HIK Jawa Tengah</div>
+                <div className="flex aspect-16/10 items-center justify-center bg-sand px-6 text-center text-sm font-bold text-teal/60">BPRS HIK Jawa Tengah</div>
               )}
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex flex-wrap gap-2">
