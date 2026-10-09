@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
+import type { SyntheticEvent } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ringkasanProduk } from '../../data/produk'
+
+const handleProductImageError = (event: SyntheticEvent<HTMLImageElement>) => {
+  const image = event.currentTarget
+  if (image.dataset.fallbackApplied) return
+
+  image.dataset.fallbackApplied = 'true'
+  image.src = '/product-placeholder.svg'
+}
 
 const productImages: Record<string, { src: string; alt: string }> = {
   tabungan: {
@@ -42,14 +51,9 @@ export function ProductShowcase({ variant = 'featured' }: { variant?: 'featured'
 
   if (variant === 'compact') {
     return (
-      <section ref={sectionRef} className="rounded-2xl border border-line bg-white p-4 sm:p-5">
+      <section ref={sectionRef} className="rounded-2xl border border-line bg-white p-4 shadow-[0_4px_16px_rgba(7,59,42,0.06)] sm:p-5">
         <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-teal">Produk & layanan</h2>
-          </div>
-          <Link to="/produk/tabungan" className="shrink-0 text-xs font-bold text-teal hover:text-teal-light">
-            Jelajahi
-          </Link>
+          <h2 className="text-xl font-bold tracking-tight text-teal">Produk & layanan</h2>
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-2">
@@ -60,14 +64,18 @@ export function ProductShowcase({ variant = 'featured' }: { variant?: 'featured'
               <Link
                 key={product.slug}
                 to={`/produk/${product.slug}`}
-                className="group relative flex min-w-0 flex-col overflow-hidden rounded-xl bg-sand/45 p-2 transition-colors hover:bg-sand"
+                className="group relative flex h-44 min-w-0 items-end justify-center overflow-hidden rounded-xl bg-sand text-center sm:h-48"
               >
-                <img src={image.src} alt="" className="h-12 w-full rounded-lg object-cover sm:h-16" />
-                <span className="mt-2 min-w-0">
-                  <span className="block truncate pr-4 text-[11px] font-bold text-teal sm:text-sm">{product.nama}</span>
-                  <span className="mt-0.5 line-clamp-2 block text-[9px] leading-3 text-ink-soft sm:text-[11px] sm:leading-4">{product.deskripsi}</span>
+                <img
+                  src={image.src}
+                  alt=""
+                  onError={handleProductImageError}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-forest/95 via-forest/35 to-transparent transition-opacity duration-300 group-hover:from-forest group-hover:via-forest/50" />
+                <span className="relative mb-3 px-2 text-sm font-bold text-white drop-shadow sm:text-base">
+                  {product.nama}
                 </span>
-                <ArrowUpRight size={14} className="absolute right-3 top-[4.1rem] text-teal/50 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:top-[5.1rem]" aria-hidden="true" />
               </Link>
             )
           })}
@@ -106,6 +114,7 @@ export function ProductShowcase({ variant = 'featured' }: { variant?: 'featured'
                 <img
                   src={image.src}
                   alt={image.alt}
+                  onError={handleProductImageError}
                   className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-teal via-teal/65 to-teal/5" />

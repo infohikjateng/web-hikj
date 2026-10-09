@@ -71,7 +71,7 @@ export function PlaceholdersAndVanishInput({
     <form
       onSubmit={handleSubmit}
       role="search"
-      className="relative mx-auto flex h-14 w-full max-w-xl items-center overflow-hidden rounded-full bg-white p-1.5 shadow-[0_2px_8px_rgba(10,87,20,0.08)]"
+      className="relative mx-auto flex h-14 w-full max-w-xl items-center overflow-hidden rounded-full bg-white p-1.5 shadow-[0_4px_16px_rgba(7,59,42,0.12)] ring-1 ring-line"
     >
       <label className="sr-only" htmlFor="homepage-search">Cari informasi di situs</label>
       <input
@@ -98,7 +98,7 @@ export function PlaceholdersAndVanishInput({
         type="submit"
         disabled={!value.trim() || isVanishing}
         aria-label="Cari"
-        className="relative z-20 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-teal text-white transition-[background-color,transform] duration-200 hover:bg-teal-light active:scale-95 disabled:cursor-not-allowed disabled:bg-sand-dark disabled:text-teal/40"
+        className="relative z-20 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-lime text-forest transition-[background-color,transform] duration-200 hover:bg-aqua active:scale-95 disabled:cursor-not-allowed disabled:bg-sand-dark disabled:text-ink-soft/50"
       >
         <ArrowRight
           size={19}

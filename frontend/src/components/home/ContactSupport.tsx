@@ -39,13 +39,13 @@ export function ContactSupport({ compact = false }: { compact?: boolean }) {
     <section
       className={
         compact
-          ? 'rounded-3xl bg-sand/80 p-4 shadow-[0_2px_8px_rgba(10,87,20,0.06)] sm:p-5'
+          ? 'rounded-3xl bg-forest p-4 shadow-[0_8px_24px_rgba(7,59,42,0.16)] sm:p-5'
           : 'bg-sand px-4 py-12 sm:px-6 md:px-10 md:py-16'
       }
     >
       <div className={compact ? '' : 'mx-auto max-w-6xl'}>
         <div className={compact ? '' : 'mx-auto max-w-2xl text-center'}>
-          <h2 className={compact ? 'text-xl font-bold tracking-tight text-teal' : 'mt-2 text-3xl font-bold tracking-tight text-teal md:text-4xl'}>
+          <h2 className={compact ? 'text-xl font-bold tracking-tight text-white' : 'mt-2 text-3xl font-bold tracking-tight text-teal md:text-4xl'}>
             Butuh bantuan?
           </h2>
         </div>
@@ -60,12 +60,12 @@ export function ContactSupport({ compact = false }: { compact?: boolean }) {
             const content = (
               compact ? (
                 <span className="flex min-w-0 items-start gap-2.5">
-                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sand text-teal">
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lime text-forest">
                     <Icon size={16} strokeWidth={2} aria-hidden="true" />
                   </span>
                   <span className="min-w-0">
                     <dt className="text-[11px] font-bold text-teal sm:text-xs">{item.label}</dt>
-                    <dd className="mt-0.5 break-words text-[10px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{item.value}</dd>
+                    <dd className="mt-0.5 wrap-break-words text-[10px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{item.value}</dd>
                   </span>
                 </span>
               ) : (
@@ -84,7 +84,7 @@ export function ContactSupport({ compact = false }: { compact?: boolean }) {
                 key={item.label}
                 className={
                   compact
-                    ? 'min-w-0 rounded-2xl bg-white/85 p-3 shadow-sm transition-shadow hover:shadow-md'
+                    ? 'min-w-0 rounded-2xl border border-white/60 bg-white p-3 shadow-sm transition-shadow hover:shadow-md'
                     : 'group rounded-2xl border border-teal/10 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal/30 hover:shadow-lg'
                 }
               >

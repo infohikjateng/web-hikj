@@ -4,17 +4,20 @@
   --font-display: "Roboto", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
 
-  --color-ink: #123317;
-  --color-ink-soft: #416047;
-  --color-canvas: #ffffff;
-  --color-sand: #ecfae5;
-  --color-sand-dark: #d9efcf;
-  --color-teal: #0a5714;
-  --color-teal-light: #0d6b1a;
-  --color-teal-dim: #0a571414;
-  --color-gold: #0a5714;
-  --color-gold-light: #bfe8b5;
-  --color-line: #cfe5c8;
+  --color-ink: #17231d;
+  --color-ink-soft: #45584e;
+  --color-canvas: #f7faf5;
+  --color-sand: #eaf4ed;
+  --color-sand-dark: #d5e9dc;
+  --color-teal: #087a4a;
+  --color-teal-light: #0a9660;
+  --color-teal-dim: #087a4a1f;
+  --color-forest: #073b2a;
+  --color-lime: #d4f000;
+  --color-aqua: #45cdb1;
+  --color-gold: #087a4a;
+  --color-gold-light: #d4f000;
+  --color-line: #d4e4d8;
 }
 
 html {
@@ -75,22 +78,24 @@ body {
   width: max-content;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--color-teal);
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-teal);
+  }
 }
 
 ::selection {
-  background-color: var(--color-gold-light);
-  color: var(--color-teal);
+  background-color: var(--color-lime);
+  color: var(--color-forest);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--color-teal);
   outline-offset: 2px;
 }
 

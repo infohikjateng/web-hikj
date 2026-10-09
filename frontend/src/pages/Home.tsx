@@ -1,42 +1,33 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUpRight, BellRing, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { ChevronsLeft, ChevronsRight } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Section } from '../components/ui/Section'
 import { ContactSupport } from '../components/home/ContactSupport'
 import { PlaceholdersAndVanishInput } from '../components/home/PlaceholdersAndVanishInput'
 import { ProductShowcase } from '../components/home/ProductShowcase'
+import sliderBaghas from '../assets/slider/baghas sep 26.webp'
+import headerAlert from '../assets/slider/header_alert.png'
+import smsNotification from '../assets/slider/sms_notif_slider.png'
 import { ringkasanProduk } from '../data/produk'
 import { SyariahCalculator } from '../features/SyariahCalculator'
 import { useBerita } from '../hooks/useBerita'
 
-const heroProductImages: Record<string, { image: string; alt: string }> = {
-  tabungan: {
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Nasabah melakukan transaksi di layanan perbankan',
-  },
-  pembiayaan: {
-    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Tim berdiskusi merencanakan pembiayaan',
-  },
-  deposito: {
-    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=85',
-    alt: 'Pertemuan untuk merencanakan masa depan',
-  },
-}
-
-const heroSlides = ringkasanProduk.map((product) => ({
-  ...product,
-  ...heroProductImages[product.slug],
+const heroSlides = Array.from({ length: 5 }, (_, index) => ({
+  ...ringkasanProduk[index % ringkasanProduk.length],
+  image: sliderBaghas,
+  alt: 'Informasi layanan keuangan syariah HIK Jateng',
 }))
 
-const noticeSlides = [
+const headerSlides = [
   {
-    title: 'Pemberitahuan layanan',
-    description: 'Informasi gangguan atau pembaruan layanan akan ditampilkan di sini.',
+    image: headerAlert,
+    alt: 'Informasi dan pemberitahuan HIK Jateng',
+    href: 'https://wbs.hikjateng.co.id',
+    label: 'Buka kanal pelaporan fraud HIK Jateng',
   },
   {
-    title: 'Pengumuman terbaru',
-    description: 'Pantau halaman ini untuk mendapatkan informasi resmi dari HIK Jateng.',
+    image: smsNotification,
+    alt: 'Informasi layanan notifikasi SMS HIK Jateng',
   },
 ]
 
@@ -48,8 +39,8 @@ const searchPlaceholders = [
 
 export function Home() {
   const navigate = useNavigate()
+  const [activeHeaderSlide, setActiveHeaderSlide] = useState(0)
   const [activeSlide, setActiveSlide] = useState(0)
-  const [activeNotice, setActiveNotice] = useState(0)
   const [kategoriAktif, setKategoriAktif] = useState('Semua')
   const [halamanBerita, setHalamanBerita] = useState(1)
   const { berita, isLoading, error } = useBerita(100)
@@ -64,7 +55,7 @@ export function Home() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveNotice((current) => (current + 1) % noticeSlides.length)
+      setActiveHeaderSlide((current) => (current + 1) % headerSlides.length)
     }, 6000)
 
     return () => window.clearInterval(timer)
@@ -91,108 +82,89 @@ export function Home() {
 
   return (
     <>
-      <section className="bg-white px-4 py-6 sm:px-6 md:py-8">
+      <section className="bg-canvas px-4 py-6 sm:px-6 md:py-8">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
             <div className="flex min-h-0 flex-col gap-4 lg:min-h-[570px]">
-              <div className="relative flex h-32 shrink-0 items-center gap-4 overflow-hidden rounded-2xl bg-sand px-4 shadow-[0_2px_8px_rgba(10,87,20,0.06)] sm:px-5">
-                <div className="flex h-20 w-24 shrink-0 items-center justify-center rounded-xl bg-white text-teal sm:w-28">
-                  <BellRing size={30} strokeWidth={1.7} aria-hidden="true" />
-                </div>
-                <div key={activeNotice} className="min-w-0 flex-1 animate-[search-placeholder-in_300ms_ease-out]">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-teal/60">
-                    Informasi HIK Jateng
-                  </p>
-                  <h2 className="mt-1 truncate text-sm font-bold text-teal sm:text-base">
-                    {noticeSlides[activeNotice].title}
-                  </h2>
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-ink-soft">
-                    {noticeSlides[activeNotice].description}
-                  </p>
-                </div>
-                <div className="absolute bottom-2 right-3 flex items-center gap-1.5">
-                  {noticeSlides.map((slide, index) => (
+              <div role="region" aria-label="Slider informasi" className="relative h-32 shrink-0 overflow-hidden rounded-2xl shadow-[0_8px_24px_rgba(7,59,42,0.16)]">
+                {headerSlides.map((slide, index) => (
+                  <div
+                    key={slide.image}
+                    aria-hidden={index !== activeHeaderSlide}
+                    className={`absolute inset-0 transition-opacity duration-500 ${
+                      index === activeHeaderSlide ? 'opacity-100' : 'pointer-events-none opacity-0'
+                    }`}
+                  >
+                    {slide.href ? (
+                      <a
+                        href={slide.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={slide.label}
+                        tabIndex={index === activeHeaderSlide ? 0 : -1}
+                        className="block h-full focus-visible:outline-teal"
+                      >
+                        <img src={slide.image} alt={slide.alt} className="h-full w-full object-cover" />
+                      </a>
+                    ) : (
+                      <img src={slide.image} alt={slide.alt} className="h-full w-full object-cover" />
+                    )}
+                  </div>
+                ))}
+                <div className="absolute bottom-2 right-3 flex items-center gap-1.5" aria-label="Pilih informasi">
+                  {headerSlides.map((slide, index) => (
                     <button
-                      key={slide.title}
+                      key={slide.image}
                       type="button"
-                      onClick={() => setActiveNotice(index)}
+                      onClick={() => setActiveHeaderSlide(index)}
                       className={`h-1.5 rounded-full transition-all ${
-                        index === activeNotice ? 'w-5 bg-teal' : 'w-1.5 bg-teal/25 hover:bg-teal/50'
+                        index === activeHeaderSlide ? 'w-5 bg-lime' : 'w-1.5 bg-white/70 hover:bg-white'
                       }`}
-                      aria-label={`Tampilkan pemberitahuan ${index + 1}`}
-                      aria-current={index === activeNotice ? 'true' : undefined}
+                      aria-label={`Tampilkan informasi ${index + 1}`}
+                      aria-current={index === activeHeaderSlide ? 'true' : undefined}
                     />
                   ))}
                 </div>
               </div>
 
-              <div className="relative h-[min(52vh,400px)] min-h-[280px] overflow-hidden rounded-2xl bg-teal shadow-lg shadow-teal/10 lg:min-h-0 lg:flex-1">
+              <div className="relative h-[min(52vh,400px)] min-h-[280px] overflow-hidden rounded-2xl bg-forest shadow-lg shadow-forest/20 lg:min-h-0 lg:flex-1">
                 {heroSlides.map((slide, index) => (
-                  <img
-                    key={slide.image}
-                    src={slide.image}
-                    alt={slide.alt}
-                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                      index === activeSlide ? 'opacity-100' : 'opacity-0'
-                    }`}
+                  <Link
+                    key={`${slide.slug}-${index}`}
+                    to={`/produk/${slide.slug}`}
+                    aria-label={`Lihat produk ${slide.nama}`}
                     aria-hidden={index !== activeSlide}
-                  />
+                    tabIndex={index === activeSlide ? 0 : -1}
+                    className={`group absolute inset-0 transition-opacity duration-700 ${
+                      index === activeSlide ? 'opacity-100' : 'pointer-events-none opacity-0'
+                    }`}
+                  >
+                    <img src={slide.image} alt={slide.alt} className="h-full w-full object-cover" />
+                    <span className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+                      <span className="text-white">
+                        <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-lime sm:text-xs [text-shadow:0_1px_4px_rgba(0,0,0,0.8)]">
+                          Solusi keuangan syariah
+                        </span>
+                        <span className="mt-1 block truncate text-xl font-bold sm:text-3xl [text-shadow:0_1px_6px_rgba(0,0,0,0.8)]">
+                          {slide.nama}
+                        </span>
+                      </span>
+                    </span>
+                  </Link>
                 ))}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-5 pb-4 pt-16 sm:px-6">
-                  <div className="flex items-end justify-between gap-3">
-                    <div className="min-w-0 text-white">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/75">
-                        Produk perbankan syariah
-                      </p>
-                      <h2 className="mt-1 truncate text-xl font-bold text-white sm:text-2xl">
-                        {heroSlides[activeSlide].nama}
-                      </h2>
-                      <p className="mt-1 line-clamp-2 max-w-lg text-xs leading-5 text-white/85 sm:text-sm">
-                        {heroSlides[activeSlide].deskripsi}
-                      </p>
-                    </div>
-                    <Link
-                      to={`/produk/${heroSlides[activeSlide].slug}`}
-                      className="mb-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-2 text-[10px] font-bold text-teal transition-colors hover:bg-sand sm:px-4 sm:text-xs"
-                    >
-                      Lihat
-                      <ArrowUpRight size={14} aria-hidden="true" />
-                    </Link>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between gap-4">
-                    <div className="flex gap-2" aria-label="Pilih gambar promosi">
-                      {heroSlides.map((slide, index) => (
-                        <button
-                          key={slide.slug}
-                          type="button"
-                          onClick={() => goToSlide(index)}
-                          className={`h-2 rounded-full transition-all ${
-                            index === activeSlide ? 'w-7 bg-white' : 'w-2 bg-white/55 hover:bg-white/80'
-                          }`}
-                          aria-label={`Tampilkan promosi ${index + 1}`}
-                          aria-current={index === activeSlide ? 'true' : undefined}
-                        />
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => goToSlide(activeSlide - 1)}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-teal transition-colors hover:bg-white"
-                        aria-label="Promosi sebelumnya"
-                      >
-                        <ChevronLeft size={18} aria-hidden="true" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => goToSlide(activeSlide + 1)}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-teal transition-colors hover:bg-white"
-                        aria-label="Promosi berikutnya"
-                      >
-                        <ChevronRight size={18} aria-hidden="true" />
-                      </button>
-                    </div>
-                  </div>
+                <div className="absolute right-5 top-5 flex gap-2 sm:right-7 sm:top-7" aria-label="Pilih gambar promosi">
+                  {heroSlides.map((slide, index) => (
+                    <button
+                      key={`${slide.slug}-${index}`}
+                      type="button"
+                      onClick={() => goToSlide(index)}
+                      className={`h-2 rounded-full transition-all ${
+                        index === activeSlide ? 'w-7 bg-lime' : 'w-2 bg-white/65 hover:bg-white'
+                      }`}
+                      aria-label={`Tampilkan promosi ${index + 1}`}
+                      aria-current={index === activeSlide ? 'true' : undefined}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -208,13 +180,6 @@ export function Home() {
             </div>
           </div>
 
-          <a
-            href="#informasi-lanjutan"
-            className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold text-ink-soft transition-colors hover:bg-sand hover:text-teal"
-          >
-            Gulir untuk informasi lainnya
-            <ArrowDown size={15} aria-hidden="true" />
-          </a>
         </div>
       </section>
 
